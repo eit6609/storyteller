@@ -6,18 +6,18 @@ const
 
 class Template {
 
-    constructor (name, builder) {
+    constructor (name, builder, mockMT, mockPug) {
         this.name = name;
         this.templatesDir = builder.templatesDir;
         this.markdown = builder.markdown;
-        this.load();
+        this.load(mockMT, mockPug);
     }
 
-    load () {
+    load (mockMT, mockPug) {
         if (this.markdown) {
-            this.template = mt.compileFile(this.getFileName());
+            this.template = (mockMT || mt).compileFile(this.getFileName());
         } else {
-            this.template = pug.compileFile(this.getFileName(), { pretty: true });
+            this.template = (mockPug || pug).compileFile(this.getFileName(), { pretty: true });
         }
     }
 

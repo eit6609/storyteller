@@ -1,7 +1,6 @@
 'use strict';
 
 const {
-        assign,
         cloneDeep,
         isArray,
         isDate,

@@ -2,7 +2,7 @@
 
 const
     { inspect } = require('util'),
-    { filter, forEach, isUndefined, pick, sortBy } = require('lodash'),
+    { filter, forEach, get, isUndefined, pick, sortBy } = require('lodash'),
     Joi = require('@hapi/joi'),
     { EPUBCreator } = require('@eit6609/epub-creator'),
     Page = require('./page.js'),
@@ -19,24 +19,30 @@ const optionsSchema = Joi.object({
         filename: Joi.string().required()
     }).required(),
     markdown: Joi.boolean(),
-    debug: Joi.boolean()
+    debug: Joi.boolean(),
+    factory: Joi.object({
+        createPage: Joi.function(),
+        createTemplate: Joi.function(),
+        createEPUBCreator: Joi.function()
+    })
 });
 
 class Builder {
 
-    constructor (options = {}, mockSchema) {
-        if (!mockSchema) {
-            this.checkOptions(options, mockSchema);
-        }
+    constructor (options = {}) {
+        this.checkOptions(options);
         this.templatesDir = options.templatesDir;
         this.outputDir = options.outputDir;
         this.metadata = options.metadata;
         this.markdown = options.markdown === true;
         this.debug = options.debug === true;
+        this.createPage = get(options, 'factory.createPage', (...params) => new Page(...params));
+        this.createTemplate = get(options, 'factory.createTemplate', (...params) => new Template(...params));
+        this.createEPUBCreator = get(options, 'factory.createEPUBCreator', (...params) => new EPUBCreator(...params));
     }
 
-    checkOptions (options, mockSchema) {
-        const { error } = (mockSchema || optionsSchema).validate(options);
+    checkOptions (options) {
+        const { error } = optionsSchema.validate(options);
         if (error) {
             error.message = `Invalid options ${inspect(options)}: ${error.message}`;
             throw error;
@@ -55,14 +61,14 @@ class Builder {
         }
         this.pages.forEach((page) => page.savePage());
         this.printReport();
-        return this.buildEpub();
+        return this.createEpub();
     }
 
     getPage (templateName, state) {
         const key = `${templateName}/${Page.hash(state)}`;
         let page = this.pages.get(key);
         if (isUndefined(page)) {
-            page = new Page(this.numberOfPages++, this.getTemplate(templateName), state, this);
+            page = this.createPage(this.numberOfPages++, this.getTemplate(templateName), state, this);
             this.pages.set(key, page);
             this.queue.push(page);
         }
@@ -72,10 +78,27 @@ class Builder {
     getTemplate (templateName) {
         let template = this.templates.get(templateName);
         if (isUndefined(template)) {
-            template = new Template(templateName, this);
+            template = this.createTemplate(templateName, this);
             this.templates.set(templateName, template);
         }
         return template;
+    }
+
+    createEpub () {
+        const spine = [];
+        for (let i = 0; i < this.numberOfPages; i++) {
+            spine.push(`${Page.numberFormat.format(i)}.html`);
+        }
+        const toc = [[{ label: 'Start', href: `${Page.numberFormat.format(0)}.html` }]];
+        const { cover } = this.metadata;
+        const epubCreator = this.createEPUBCreator({
+            contentDir: this.outputDir,
+            spine,
+            toc,
+            cover,
+            simpleMetadata: pick(this.metadata, ['author', 'title', 'language'])
+        });
+        return epubCreator.create(this.metadata.filename);
     }
 
     printReport () {
@@ -101,23 +124,6 @@ class Builder {
                 console.log(`    ${this.pages.get(pageKey).id}\t${state}`);
             });
         });
-    }
-
-    buildEpub () {
-        const spine = [];
-        for (let i = 0; i < this.numberOfPages; i++) {
-            spine.push(`${Page.numberFormat.format(i)}.html`);
-        }
-        const toc = [[{ label: 'Start', href: `${Page.numberFormat.format(0)}.html` }]];
-        const { cover } = this.metadata;
-        const epubCreator = new EPUBCreator({
-            contentDir: this.outputDir,
-            spine,
-            toc,
-            cover,
-            simpleMetadata: pick(this.metadata, ['author', 'title', 'language'])
-        });
-        return epubCreator.create(this.metadata.filename);
     }
 
 }
