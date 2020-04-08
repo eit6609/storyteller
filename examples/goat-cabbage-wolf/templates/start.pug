@@ -1,0 +1,17 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+    head
+        link(href="style-epub.css", rel="stylesheet", type="text/css")
+        title Saving Goat and Cabbages
+    body
+        h3 Saving Goat and Cabbages
+        h4 Introduction
+        hr
+        p!= debug()
+        p.first Welcome to the #[em Saving Goat and Cabbages] game!
+        p Your mission is to carry a goat, a cabbage and a wolf across a river.
+        p You have a boat, but it's little and it can bring only one object besides you.
+        p But be careful not to leave the goat alone with the cabbage on a bank: the goat would eat the cabbage!
+        p And also be careful not to leave the wolf alone with the goat on a bank: the wolf would eat the goat!
+        p Ready? click #[a(href=goto('bank0')) here] to begin.
+        hr

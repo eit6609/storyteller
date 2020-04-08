@@ -1,0 +1,24 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+    head
+        link(href="style-epub.css", rel="stylesheet", type="text/css")
+        title Desert Traversal
+    body
+        h3 Desert Traversal
+        h4 Introduction
+        hr
+        p!= debug()
+        p.first Welcome to the #[em Desert Traversal] game!
+        p.
+            You are at the edge of the desert and you must reach your base at the opposite edge of it. That is, you have
+            to cross the desert.
+        p.
+            You have a motorbike that can carry #{state.getConfig().loadCapacity} jerrycan(s) of fuel, and the tank
+            can be filled up with #{state.getConfig().tankCapacity} jerrycan(s).
+        p.
+            Along the way you can stop in #{state.getConfig().locations} locations. This number is determined by
+            the distance that you can go with a full tank. That is, going from a location to the next or the previous
+            one consumes #{state.getConfig().consumption} jerrycan(s) of fuel.
+        p Your starting location has #{state.getConfig().cans} jerrycan(s).
+        p Ready? click #[a(href=goto('location')) here] to start.
+        hr

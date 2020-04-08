@@ -1,0 +1,35 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+    head
+        link(href="style-epub.css", rel="stylesheet", type="text/css")
+        title The Tower of Hanoi
+    body
+        h3 The Tower of Hanoi
+        hr
+        p.first The situation is:
+        ul
+            li Peg 1: #{state.pegs[0]}
+            li Peg 2: #{state.pegs[1]}
+            li Peg 3: #{state.pegs[2]}
+        if state.isFinished()
+            h1 YOU’VE WON!
+            br
+            p.first Want to #[a(href=goto((state) => state.reset())) play again]?
+        else
+            p.first Possible moves are:
+            ul
+                if state.canMove(0, 1)
+                    li #[a(href=goto((state) => state.move(0, 1))) 1 ==> 2]
+                if state.canMove(0, 2)
+                    li #[a(href=goto((state) => state.move(0, 2))) 1 ==> 3]
+                if state.canMove(1, 2)
+                    li #[a(href=goto((state) => state.move(1, 2))) 2 ==> 3]
+                if state.canMove(2, 1)
+                    li #[a(href=goto((state) => state.move(2, 1))) 3 ==> 2]
+                if state.canMove(2, 0)
+                    li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
+                if state.canMove(1, 0)
+                    li #[a(href=goto((state) => state.move(1, 0))) 2 ==> 1]
+            p Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
+            p Or you may want to review the #[a(href=goto('start', (state) => state.reset())) instructions].
+        hr

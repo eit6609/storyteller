@@ -1,0 +1,33 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+    head
+        link(href="style-epub.css", rel="stylesheet", type="text/css")
+        title Desert Traversal
+    body
+        h3 Desert Traversal
+        h4 Introduction
+        hr
+        p!= debug()
+        p.first There are #{state.locations[state.location]} jerrycan(s) at this location.
+        p.first You are carrying #{state.payload} jerrycan(s) and your tank contains #{state.tank} jerrycan(s) of fuel.
+        if state.isFinished()
+            h1 You’ve won!
+            p.first You did it in #{state.trips} trips.</p>
+            p.first Click #[a(href=goto((state) => state.reset())) here] to restart.
+        else if state.isStranded()
+            h1 You’re stranded!
+            p.first Click #[a(href=goto((state) => state.reset())) here] to restart.
+        else
+            p.first You can:
+            ul
+                if state.canFillTank()
+                    li #[a(href=goto((state) => state.fillTank())) fill the tank with a jerrycan]
+                if state.canLoad()
+                    li #[a(href=goto((state) => state.load())) load a jerrycan]
+                if state.canUnload()
+                    li #[a(href=goto((state) => state.unload())) unload a jerrycan]
+                if state.canGoToPreviousLocation()
+                    li #[a(href=goto((state) => state.goToPreviousLocation())) go to location #{state.location}]
+                if state.canGoToNextLocation()
+                    li #[a(href=goto((state) => state.goToNextLocation())) go to location #{state.location + 2}]
+        hr

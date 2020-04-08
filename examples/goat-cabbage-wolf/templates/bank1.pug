@@ -1,0 +1,29 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+    head
+        link(href="style-epub.css", rel="stylesheet", type="text/css")
+        title Saving Goat and Cabbages
+    body
+        h3 Saving Goat and Cabbages
+        h4 Arrival bank
+        hr
+        p!= debug()
+        if state.banks[1].size
+            p.first On the bank there are:
+            ul
+                each item in [...state.banks[1]]
+                    li #{state.describe(item)}
+        if state.isFinished()
+            h2 YOU WON
+            p But you can #[a(href=goto('bank0', (state) => state.reset())) restart the game], if you want.
+        else
+            p.first You can:
+            ul
+                if state.boat.size
+                    each item in [...state.boat]
+                        li #[a(href=goto((state) => state.unloadItem(item, 1))) unload #{state.describe(item)}]
+                else
+                    each item in [...state.banks[1]]
+                        li #[a(href=goto((state) => state.loadItem(item, 1))) load #{state.describe(item)}]
+                li #[a(href=goto('river')) leave the bank]
+        hr

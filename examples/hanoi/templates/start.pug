@@ -1,0 +1,25 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+    head
+        link(href="style-epub.css", rel="stylesheet", type="text/css")
+        title The Tower of Hanoi
+    body
+        h3 The Tower of Hanoi
+        hr
+        p.firstOfChapter Welcome to the #[em Tower of Hanoi] game!
+        p.
+            In this game there are three pegs, numbered from 1 to 3, and #{state.getConfig().nDiscs} disks,
+            numbered from 1 to #{state.getConfig().nDiscs}. The bigger the number, the bigger the disk.
+        p At the beginning, all the disks are stacked on peg 1, with decreasing diameters from the bottom to the top.
+        p Graphically, the situation is shown like this:
+        ul
+            li Peg 1: #{state.pegs[0]}
+            li Peg 2: #{state.pegs[1]}
+            li Peg 3: #{state.pegs[2]}
+        p.first That is, the stacks are shown with the bottom to the left and the top to the right.
+        p Your goal is to move all the stack from peg 1 to peg 3, following these rules:
+        ul
+            li You can move only one disk at a time, from the top of a stack to the top of another.
+            li You can put a disk only on an empty stack or on a bigger disk.
+        p.first Ready? click #[a(href=goto('status')) here] to start.
+        hr
