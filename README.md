@@ -19,7 +19,17 @@ It was inspired by [the Medusa compiler of Enrico Colombini](http://www.erix.it/
 
 Install it by running:
 
-	npm i @eit6609/xyz
+    npm i @eit6609/xyz
+
+And use it like this:
+```js
+const XYZGenerator = require('@eit6609/xyz');
+const options = ...
+const initialTemplateName = ...
+const initialState = ...
+const generator = new XYZGenerator(options)
+await generator.generate(initialTemplateName, initialState);
+```
 
 ## Why interactive ebooks?
 
