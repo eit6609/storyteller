@@ -2,11 +2,11 @@
 
 const
     { forEach, toPairs } = require('lodash'),
-    Builder = require('../../src/builder.js'),
+    Generator = require('../../src/generator.js'),
     Page = require('../../src/page.js'),
     Template = require('../../src/template.js');
 
-describe('Builder', () => {
+describe('Generator', () => {
     let factory, options, sut;
     beforeEach(() => {
         factory = {
@@ -35,14 +35,14 @@ describe('Builder', () => {
     describe('constructor()', () => {
         it('should throw if the options are not valid', () => {
             try {
-                sut = new Builder({});
+                sut = new Generator({});
                 fail();
             } catch (error) {
                 expect(error.message).toBe('Invalid options {}: "templatesDir" is required');
             }
         });
         it('should store the options', () => {
-            sut = new Builder(options);
+            sut = new Generator(options);
             expect(sut.templatesDir).toBe(options.templatesDir);
             expect(sut.outputDir).toBe(options.outputDir);
             expect(sut.metadata).toBe(options.metadata);
@@ -53,7 +53,7 @@ describe('Builder', () => {
             expect(sut.createEPUBCreator).toBe(options.factory.createEPUBCreator);
         });
     });
-    describe('build()', () => {
+    describe('generate()', () => {
         class MockPage extends Page {
             constructor (...params) {
                 super(...params);
@@ -113,10 +113,10 @@ describe('Builder', () => {
                 return page;
             });
             spyOn(factory, 'createTemplate').and.callFake((...params) => new MockTemplate(...params));
-            sut = new Builder(options);
+            sut = new Generator(options);
             spyOn(sut, 'createEpub').and.returnValue(Promise.resolve());
             spyOn(sut, 'printReport').and.callThrough();
-            await sut.build(initialTemplateName, initialState);
+            await sut.generate(initialTemplateName, initialState);
             forEach(toPairs(sut.pages), ([key, page], index) => {
                 expect({
                     key,
@@ -132,14 +132,14 @@ describe('Builder', () => {
     });
     describe('getPage()', () => {
         it('should return the page if it exists', () => {
-            sut = new Builder(options);
+            sut = new Generator(options);
             sut.pages = new Map([['a-template/a-state', 'page']]);
             expect(sut.getPage('a-template', 'a-state')).toBe('page');
         });
         it('should call sut.getTemplate() and create the page if it does not exist, then set it in sut.pages and ' +
             'add it to sut.queue and increment sut.numberOfPages', () => {
             spyOn(factory, 'createPage').and.returnValue('a-page');
-            sut = new Builder(options);
+            sut = new Generator(options);
             sut.pages = new Map();
             sut.queue = [0];
             sut.numberOfPages = 20;
@@ -153,13 +153,13 @@ describe('Builder', () => {
     });
     describe('getTemplate()', () => {
         it('should return the template if it exists', () => {
-            sut = new Builder(options);
+            sut = new Generator(options);
             sut.templates = new Map([['a-template', 'template']]);
             expect(sut.getTemplate('a-template')).toBe('template');
         });
         it('should create the template if it does not exist and then set it in sut.templates', () => {
             spyOn(factory, 'createTemplate').and.returnValue('a-dummy-template');
-            sut = new Builder(options);
+            sut = new Generator(options);
             sut.templates = new Map();
             expect(sut.getTemplate('a-template')).toBe('a-dummy-template');
             expect(sut.templates.get('a-template')).toBe('a-dummy-template');
@@ -173,7 +173,7 @@ describe('Builder', () => {
                 }
             };
             spyOn(factory, 'createEPUBCreator').and.returnValue(epubCreator);
-            sut = new Builder(options);
+            sut = new Generator(options);
             sut.numberOfPages = 4;
             spyOn(epubCreator, 'create');
             await sut.createEpub();

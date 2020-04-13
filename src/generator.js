@@ -27,7 +27,7 @@ const optionsSchema = Joi.object({
     })
 });
 
-class Builder {
+class Generator {
 
     constructor (options = {}) {
         this.checkOptions(options);
@@ -49,7 +49,7 @@ class Builder {
         }
     }
 
-    build (initialTemplateName, initialState) {
+    generate (initialTemplateName, initialState) {
         this.numberOfPages = 0;
         this.queue = [];
         this.pages = new Map();
@@ -128,4 +128,4 @@ class Builder {
 
 }
 
-module.exports = Builder;
+module.exports = Generator;

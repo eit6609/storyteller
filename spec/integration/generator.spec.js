@@ -5,7 +5,7 @@ const
     { join } = require('path'),
     { walk } = require('@eit6609/walker'),
     fs = require('fs'),
-    Builder = require('../../src/builder.js'),
+    Generator = require('../../src/generator.js'),
     State = require('../../examples/hanoi/code/hanoi.js');
 
 const
@@ -24,7 +24,7 @@ function readFiles (dir) {
     }
 }
 
-describe('Builder [integration]', () => {
+describe('Generator [integration]', () => {
     it('should create the expected pages', async () => {
         const options = {
             templatesDir: TEMPLATES_DIR,
@@ -37,9 +37,9 @@ describe('Builder [integration]', () => {
                 filename: RESULT_FILENAME
             }
         };
-        const builder = new Builder(options);
+        const generator = new Generator(options);
         State.configure({ nDiscs: 4 });
-        await builder.build('start', new State());
+        await generator.generate('start', new State());
         const files = readFiles(OUTPUT_DIR);
         const expectedFiles = readFiles(EXPECTED_OUTPUT_DIR);
         expect(files).toEqual(expectedFiles);
