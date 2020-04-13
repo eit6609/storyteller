@@ -2,14 +2,14 @@
 
 const
     CapraCavoloLupo = require('./goat-cabbage-wolf.js'),
-    Builder = require('../../../src/builder.js');
+    Generator = require('../../../src/generator.js');
 
 function build () {
     const options = {
         templatesDir: '../templates',
         outputDir: '../out-markdown',
         markdown: true,
-        debug: true,
+        debug: false,
         metadata: {
             title: 'Saving Goat and Cabbages',
             author: 'Dario Morandini',
@@ -18,9 +18,9 @@ function build () {
             cover: 'images/cover.png',
         }
     };
-    const builder = new Builder(options);
+    const generator = new Generator(options);
     const initialState = new CapraCavoloLupo();
-    return builder.build('start', initialState, options);
+    return generator.generate('start', initialState, options);
 }
 
 build().catch((error) => console.log(error));

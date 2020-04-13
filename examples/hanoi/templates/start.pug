@@ -6,6 +6,7 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
     body
         h3 The Tower of Hanoi
         hr
+        p!= debug()
         p.firstOfChapter Welcome to the #[em Tower of Hanoi] game!
         p.
             In this game there are three pegs, numbered from 1 to 3, and #{state.getConfig().nDiscs} disks,

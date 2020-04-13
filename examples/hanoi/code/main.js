@@ -1,14 +1,14 @@
 'use strict';
 
 const
-    Builder = require('../../../src/builder.js'),
+    Generator = require('../../../src/generator.js'),
     Hanoi = require('./hanoi.js');
 
 function build () {
     const options = {
         templatesDir: '../templates',
         outputDir: '../out',
-        debug: true,
+        debug: false,
         metadata: {
             title: 'The Tower of Hanoi',
             author: 'Dario Morandini',
@@ -16,9 +16,9 @@ function build () {
             filename: 'hanoi.epub'
         }
     };
-    const builder = new Builder(options);
+    const generator = new Generator(options);
     Hanoi.configure({ nDiscs: 4 });
-    return builder.build('start', new Hanoi(), options);
+    return generator.generate('start', new Hanoi(), options);
 }
 
 build().catch((error) => console.log(error));
