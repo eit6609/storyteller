@@ -1,4 +1,7 @@
 /node_modules
 /coverage
-/prove
+/examples/**/*.html
+/spec/fixtures/output
+/spec/fixtures/result.epub
 npm-debug.log
+.DS_Store
