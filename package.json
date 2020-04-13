@@ -14,7 +14,7 @@
         "type": "git",
         "url": "https://github.com/eit6609/colombini.git"
     },
-    "main": "src/builder.js",
+    "main": "src/generator.js",
     "license": "ISC",
     "devDependencies": {
         "@eit6609/walker": "^1.0.0",
