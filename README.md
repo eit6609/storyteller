@@ -25,16 +25,15 @@ Install it by running:
 
 You can find the details behind the idea in Colombini's [Interactive Fiction & ebooks: Designing puzzles for digital books](https://www.amazon.it/Interactive-Fiction-ebooks-Designing-italiano-ebook/dp/B07DZ3F71K), and an introduction in [the slides about Medusa from Lua workshop 2014](http://www.lua.org/wshop14/Colombini.pdf).
 
-With an interactive ebook you don't need an engine to play the of game, because the game has been pre-played by XYZ. All you need is an ebook reader.
+With an interactive ebook you don't need an engine to play the game, because the game has been pre-played by XYZ. All you need is an ebook reader.
 
-Since there are ebook readers for every device (included the dedicated, e-ink devices) you get the maximum portability.
+Since there are ebook readers for every device you get the maximum portability.
 
 Of course there are some limitations in the design of the game:
 
 * the actions can be performed only by following links
 * you cannot use random generators or unlimited counters
 * you must avoid a combinatorial explosion
-
 
 [Interactive Fiction & ebooks](https://www.amazon.it/Interactive-Fiction-ebooks-Designing-italiano-ebook/dp/B07DZ3F71K) deals thoroughly with these issues, however I give you some tips & tricks at the end of this document.
 
@@ -44,7 +43,7 @@ There are also some limits for the player:
 
 This limitations notwithstanding, you can create amazing games.
 
-If you try *Locusta Temporis* you won't believe your eyes. And it was created with Medusa, which is funcionally equivalent to XYZ.
+If you try *Locusta Temporis* you won't believe your eyes. And it was created with Medusa, which is functionally equivalent to XYZ.
 
 You can find some example ePUBs in the [examples](#examples).
 
@@ -191,14 +190,14 @@ The combination of a template and a state generates a page:
 
 	template + state = page
 
-To keep track of the generated pages, every state instance is reduced to a *hash*, which is a human friendly string that uniquely identifies the state.
-It's a sort of compact JSON, that can deal also with the new features of ES6, like Maps and Sets, which are not handled by the standard JSON support.
+To keep track of the generated pages, every state instance is reduced to a *hash*, which is a human readable string that uniquely identifies the state.
+It's a kind of compact JSON, that can deal also with the new features of ES6, like Maps and Sets, which are not handled by the standard JSON support.
 
 A template name and a state hash uniquely identify a page:
 
 	template name + hash(state) = page key
 
-For debug and learning purposes, you can use the `debug()` function inside a template to show the page key. Because the hash is human friendly, it is a meaningful representation of the state. It can be very useful to understand why the template engine has generated the page as it is.
+For debug and learning purposes, you can use the `debug()` function inside a template to show the page key. Because the hash is human readable, it is a meaningful representation of the state. It can be very useful to understand why the template engine has generated the page as it is.
 
 ## API reference
 
@@ -209,7 +208,7 @@ For debug and learning purposes, you can use the `debug()` function inside a tem
 These are the supported options:
 
 * `templatesDir`, string, required: the path of the directory containing the templates
-* `outputDir`, string, required: the path of the directory to use for the generated XHTML files. This directory is used as input for the [ePUB creator](https://github.com/eit6609/epub-creator), so you can put in this directory any extra file (images, sylesheets) that you need in the ePUB.
+* `outputDir`, string, required: the path of the directory to use for the generated XHTML files. This directory is used as input for the [ePUB creator](https://github.com/eit6609/epub-creator), so you can put in this directory any extra file (images, stylesheets) that you need in the ePUB.
 * `metadata`, object, required, the options for the ePUB creator, with these properties:
     * `title`, string, optional, default `untitled`: the title of the ePUB
     * `author`, string, optional, default no author: the author of the ePUB
@@ -243,7 +242,7 @@ If the `debug` option is `true`, this function returns the key of the current pa
 #### `goto(templateName?: string, action?: function)`
 
 * `templateName` is the path of a template file, without the extension, relative to the `templatesDir`. It defaults to the current template's name.
-* `action` is a function that receives the current state as its only parameter and modifies it. It should return a falsy value unless it wants to replace the current state with a new one: in this case it should return the new state. This is handy for complex games because it enables you to move through independent stages of the game. More about this later, in the *Tips & Tricks* section. 
+* `action` is a function that receives the current state as its only parameter and modifies it. It should return a falsy value unless it wants to replace the current state with a new one: in this case it should return the new state. This is handy for complex games because it enables you to move through independent stages of the game. More about this later, in the *Tips & Tricks* section.
 
 ## Examples
 
@@ -288,7 +287,7 @@ You can download the generated ePUB [here](examples/hanoi/code/hanoi.epub).
 
 The golden rule to avoid combinatorial explosion is:
 
-**You must keep the state as empty as possible.**
+> You must keep the state as empty as possible
 
 Let's see some examples.
 
@@ -361,7 +360,7 @@ For the sake of precision, there are only 2 * *n* - 1 pages, because the state `
 
 #### Consume objects
 
-Almost every adventure game has a basket where the player can collect objects. 
+Almost every adventure game has a basket where the player can collect objects.
 
 However, keeping objects in the basket is very expensive, because you'll have 2 ^ *n* possible states if you need to keep track of *n* objects.
 
@@ -369,6 +368,6 @@ You should prefer objects that get consumed, and drop them as soon as you can.
 
 #### Partition the game
 
-You should partion the game in several independent stages, in order to reset the state when you finish one stage and enter another.
+You should partition the game in several independent stages, in order to reset the state when you finish one stage and enter another.
 
 You should implement the different stages with different state classes, and then exploit the feature of the generator that uses a new state when an action returns one to make the transition from one stage to the other.
