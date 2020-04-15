@@ -22,6 +22,7 @@ function readFiles (dir) {
             files.push(fs.readFileSync(filePath, 'utf8'));
         });
     }
+    return files;
 }
 
 describe('Generator [integration]', () => {
@@ -29,7 +30,7 @@ describe('Generator [integration]', () => {
         const options = {
             templatesDir: TEMPLATES_DIR,
             outputDir: OUTPUT_DIR,
-            debug: true,
+            debug: false,
             metadata: {
                 title: 'The Tower of Hanoi',
                 author: 'Dario Morandini',
