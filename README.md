@@ -60,7 +60,7 @@ You can find some example ePUBs in the [examples](#examples).
 
 ## How does it work?
 
-### The state
+### The state class
 
 The logic of the game is implemented with a class that contains the state of the game and the methods to access and
 manipulate the state.
@@ -169,17 +169,23 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
 
 As you can see the accessors are used to display data:
 
-    li Peg 1: #{state.pegs[0]}
+```pug
+            li Peg 1: #{state.pegs[0]}
+```
 
 and to make decisions:
 
-    if state.canMove(0, 2)
+```pug
+                if state.canMove(0, 2)
+```
 
 The modifiers are used in the links, with the `goto()` function, to perform actions:
 
-    li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
-    ...
-    p Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
+```pug
+                    li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
+...
+            p.first Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
+```
 
 ### The generator
 
@@ -204,7 +210,7 @@ The combination of a template and a state generates a page:
     template + state = page
 
 To keep track of the generated pages, every state instance is reduced to a *hash*, which is a human readable string that
-uniquely identifies the state.
+uniquely identifies the state instance.
 It's a kind of compact JSON, that can deal also with the new features of ES6, like Maps and Sets, which are not handled
 correctly by the functions of the JSON module.
 
@@ -255,7 +261,7 @@ These are the properties of the "locals" of the template engine.
 
 #### `state`
 
-It is the state instance, that can be used to call its accessors.
+It is the current state instance, that can be used to call its accessors to display data and make decisions.
 
 #### `debug(): string`
 
@@ -266,7 +272,7 @@ modifying the templates.
 
 #### `goto(templateName?: string, action?: function): string`
 
-The purpose of the function is to ask the generator the URL of the page identified by the template name and the hash of
+The purpose of this function is to ask the generator the URL of the page identified by the template name and the hash of
 the state you get by applying the action to a copy of the current state.
 The function returns the URL of the requested page, that can be used in the `href` of an `a` to create a link.
 
@@ -368,7 +374,7 @@ class Safe {
 
 with this template:
 
-```
+```pug
 doctype strict
 html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
     head
