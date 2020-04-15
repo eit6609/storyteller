@@ -385,14 +385,13 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
         hr
         if state.isRight()
             h1 YOU’VE WON!
+        else if state.isWrong()
+            h1 YOU’VE LOST!
         else
-            if state.isWrong()
-                h1 YOU’VE LOST!
-            else
-                p.first Choose digit ##{state.index + 1}:
-                ul
-                    - for (let i = 0; i < state.combination.length; i++)
-                        li #[a(href=goto((s) => s.choose(i))) #{i}]
+            p.first Choose digit ##{state.index + 1}:
+            ul
+                - for (let i = 0; i < state.combination.length; i++)
+                    li #[a(href=goto((s) => s.choose(i))) #{i}]
         hr
 ```
 
