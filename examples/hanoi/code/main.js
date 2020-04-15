@@ -18,7 +18,7 @@ function build () {
     };
     const generator = new Generator(options);
     Hanoi.configure({ nDiscs: 4 });
-    return generator.generate('start', new Hanoi(), options);
+    return generator.generate('start', new Hanoi());
 }
 
 build().catch((error) => console.log(error));

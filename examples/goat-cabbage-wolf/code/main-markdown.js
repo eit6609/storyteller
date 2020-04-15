@@ -1,7 +1,7 @@
 'use strict';
 
 const
-    CapraCavoloLupo = require('./goat-cabbage-wolf.js'),
+    GoatCabbageWolf = require('./goat-cabbage-wolf.js'),
     Generator = require('../../../src/generator.js');
 
 function build () {
@@ -19,8 +19,7 @@ function build () {
         }
     };
     const generator = new Generator(options);
-    const initialState = new CapraCavoloLupo();
-    return generator.generate('start', initialState, options);
+    return generator.generate('start', new GoatCabbageWolf());
 }
 
 build().catch((error) => console.log(error));

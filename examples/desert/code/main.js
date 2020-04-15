@@ -25,8 +25,7 @@ function build () {
         loadCapacity: 2
     };
     Desert.configure(config);
-    const initialState = new Desert();
-    return generator.generate('start', initialState, options);
+    return generator.generate('start', new Desert());
 }
 
 build().catch((error) => console.log(error));
