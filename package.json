@@ -1,10 +1,12 @@
 {
     "name": "@eit6609/storyteller",
     "version": "1.0.0",
-    "description": "An interactive epub generator",
+    "description": "An interactive ebooks generator",
     "keywords": [
         "epub",
         "ebook",
+        "adventure",
+        "game",
         "adventure games",
         "if",
         "interactive fiction",
