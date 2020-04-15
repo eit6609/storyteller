@@ -162,8 +162,8 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
                     li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
                 if state.canMove(1, 0)
                     li #[a(href=goto((state) => state.move(1, 0))) 2 ==> 1]
-            p Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
-            p Or you may want to review the #[a(href=goto('start', (state) => state.reset())) instructions].
+            p.first Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
+            p.first Or you may want to review the #[a(href=goto('start', (state) => state.reset())) instructions].
         hr
 ```
 
