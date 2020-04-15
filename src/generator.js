@@ -103,7 +103,7 @@ class Generator {
 
     printReport () {
         function makeFilterByTemplateName (templateName) {
-            return (pageKey) => pageKey.substring(0, pageKey.indexOf('/')) === templateName;
+            return (pageKey) => pageKey.substring(0, pageKey.lastIndexOf('/')) === templateName;
         }
 
         const templateNames = sortBy(Array.from(this.templates.keys()));
