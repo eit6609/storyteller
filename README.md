@@ -183,8 +183,8 @@ The modifiers are used in the links, with the `goto()` function, to perform acti
 
 ```pug
                     li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
-...
-            p.first Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
+
+            p.first Or you may want to review the #[a(href=goto('start', (state) => state.reset())) instructions].
 ```
 
 ### The generator
