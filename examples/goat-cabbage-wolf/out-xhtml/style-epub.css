@@ -1,4 +1,4 @@
-/* STILI PARAGRAFO */
+/* PARAGRAPH STYLES */
 
 body {
  	font-family:Times New Roman, serif;
@@ -156,7 +156,7 @@ div.epigraph p {
 	font-variant:small-caps;
 }
 
-/* STILI CARATTERE */
+/* CHARACTER STYLES */
 
 .me {
 	font-style:normal;
