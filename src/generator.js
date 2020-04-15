@@ -121,7 +121,7 @@ class Generator {
             const keysOfTemplate = filter(pageKeys, makeFilterByTemplateName(templateName));
             forEach(keysOfTemplate, (pageKey) => {
                 const state = pageKey.substring(templateName.length + 1);
-                console.log(`    ${this.pages.get(pageKey).id}\t${state}`);
+                console.log(`    ${this.pages.get(pageKey).getPageURL()}\t${state}`);
             });
         });
     }
