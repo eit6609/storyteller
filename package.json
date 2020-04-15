@@ -1,7 +1,15 @@
 {
-    "name": "@eit6609/markdown-templates",
+    "name": "@eit6609/storyteller",
     "version": "1.0.0",
     "description": "An interactive epub generator",
+    "keywords": [
+        "epub",
+        "ebook",
+        "adventure games",
+        "if",
+        "interactive fiction",
+        "interactive ebook"
+    ],
     "Author": "Dario Morandini",
     "scripts": {
         "ci": "ENV=ci eslint src examples/**/code && ENV=ci istanbul cover --root src/ jasmine",
@@ -12,7 +20,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/eit6609/colombini.git"
+        "url": "https://github.com/eit6609/storyteller.git"
     },
     "main": "src/generator.js",
     "license": "ISC",
