@@ -1,41 +1,40 @@
-## nomi
+# Storyteller, a generator of interactive ebooks
 
-* storyteller
-* adventures-in-epub
-* IEG (Interactive EPUB Generator)
-* epubgame
-* game-ebook, gamepub (da gamebook, il librogame)
-
-# XYZ, a generator of interactive ebooks
-
-XYZ is a tool for the generation of game ebooks that, given
+Storyteller is a tool for the generation of game ebooks that, given
 
 * a set of XHTML templates representing the locations of the game
 * a class containing the data and implementing the actions of the game
 
-generates an ePUB containing all the possible situations of the game. The player plays the game by following the links.
+generates an ePUB containing all the possible situations of the game.
+The player then plays the game by following the links.
 
-It was inspired by [the Medusa compiler of Enrico Colombini](http://www.erix.it/medusa.html), which was used it to create his [Locusta Temporis](https://www.amazon.it/Locusta-Temporis-Enrico-Colombini-ebook/dp/B07DZ23VQP) interactive e-book.
+It was inspired by [the Medusa compiler of Enrico Colombini](http://www.erix.it/medusa.html), which was used to create
+his [Locusta Temporis](https://www.amazon.it/Locusta-Temporis-Enrico-Colombini-ebook/dp/B07DZ23VQP) interactive ebook.
 
 Install it by running:
 
-    npm i @eit6609/xyz
+    npm i @eit6609/storyteller
 
 And use it like this:
+
 ```js
-const XYZGenerator = require('@eit6609/xyz');
+const Storyteller = require('@eit6609/storyteller');
+
 const options = ...
+const storyteller = new Storyteller(options)
 const initialTemplateName = ...
 const initialState = ...
-const generator = new XYZGenerator(options)
-await generator.generate(initialTemplateName, initialState);
+await storyteller.generate(initialTemplateName, initialState);
 ```
 
 ## Why interactive ebooks?
 
-You can find the details behind the idea in Colombini's [Interactive Fiction & ebooks: Designing puzzles for digital books](https://www.amazon.it/Interactive-Fiction-ebooks-Designing-italiano-ebook/dp/B07DZ3F71K), and an introduction in [the slides about Medusa from Lua workshop 2014](http://www.lua.org/wshop14/Colombini.pdf).
+You can find the details behind the idea in Colombini's
+[Interactive Fiction & ebooks: Designing puzzles for digital books](https://www.amazon.it/Interactive-Fiction-ebooks-Designing-italiano-ebook/dp/B07DZ3F71K), and an introduction in
+[the slides about Medusa from Lua workshop 2014](http://www.lua.org/wshop14/Colombini.pdf).
 
-With an interactive ebook you don't need an engine to play the game, because the game has been pre-played by XYZ. All you need is an ebook reader.
+With an interactive ebook you don't need an engine to play the game, because the game has been pre-played by
+Storyteller. All you need is an ebook reader.
 
 Since there are ebook readers for every device you get the maximum portability.
 
@@ -45,7 +44,8 @@ Of course there are some limitations in the design of the game:
 * you cannot use random generators or unlimited counters
 * you must avoid a combinatorial explosion
 
-[Interactive Fiction & ebooks](https://www.amazon.it/Interactive-Fiction-ebooks-Designing-italiano-ebook/dp/B07DZ3F71K) deals thoroughly with these issues, however I give you some tips & tricks at the end of this document.
+[Interactive Fiction & ebooks](https://www.amazon.it/Interactive-Fiction-ebooks-Designing-italiano-ebook/dp/B07DZ3F71K)
+deals thoroughly with these issues, however I give you some tips & tricks at the end of this document.
 
 There are also some limits for the player:
 
@@ -53,7 +53,8 @@ There are also some limits for the player:
 
 This limitations notwithstanding, you can create amazing games.
 
-If you try *Locusta Temporis* you won't believe your eyes. And it was created with Medusa, which is functionally equivalent to XYZ.
+If you try *Locusta Temporis* you won't believe your eyes. And it was created with Medusa, which is functionally
+equivalent to Storyteller.
 
 You can find some example ePUBs in the [examples](#examples).
 
@@ -61,12 +62,8 @@ You can find some example ePUBs in the [examples](#examples).
 
 ### The state
 
-The logic of the game is implemented with a class that contains the state of the game.
-
-You'll need two types of methods:
-
-* accessors (including properties accessors), that are called in the templates to show dynamic data and make decisions
-* modifiers, that are called when the user follows a link
+The logic of the game is implemented with a class that contains the state of the game and the methods to access and
+manipulate the state.
 
 Let's see an example, that is included in the complete [examples](#examples):
 
@@ -110,31 +107,37 @@ class Hanoi {
 }
 ```
 
-In this state class, the property `pegs` and the methods `getConfig()`, `canMove()` and `isFinished()` are the accessors.
+In this state class, the property `pegs` and the methods `getConfig()`, `canMove()` and `isFinished()` let you access
+the state to display information and make decisions in the template.
 
-The methods `reset()` and `move()` are the modifiers.
+The methods `reset()` and `move()` are modifiers, and will be used with the `goto()` function, explained later.
 
 ### The templates
 
 The pages of the ebook are generated by a set of XHTML templates, one for every location of the game.
 
-After many experiments with the most popular templating engines for Nodejs, I have chosen [Pug](https://pugjs.org/api/getting-started.html) because it gives you enough freedom to call JavaScript code inside the template. This is vital, but many engines (the very popular [Handlebars](https://handlebarsjs.com) among others) make the call of methods on a class instance a nightmare.
+After many experiments with the most popular templating engines for Node.js, I have chosen
+[Pug](https://pugjs.org/api/getting-started.html) because it gives you enough freedom to call JavaScript code inside
+the template. This is vital, but many engines (the very popular [Handlebars](https://handlebarsjs.com) among others)
+make the call of methods on a class instance a nightmare.
 
 Of course [EJS](https://ejs.co) gives you *complete* freedom, but I prefer higher level engines like Pug.
 
-I have added **experimental** support for markdown templating by means of my [Markdown Templates](https://github.com/eit6609/markdown-templates) engine.
+I have added **experimental** support for markdown templating by means of my
+[Markdown Templates](https://github.com/eit6609/markdown-templates) engine.
 
 Let's see an example of template:
 
-```
+```pug
 doctype strict
-html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
     head
         link(href="style-epub.css", rel="stylesheet", type="text/css")
         title The Tower of Hanoi
     body
         h3 The Tower of Hanoi
         hr
+        p!= debug()
         p.first The situation is:
         ul
             li Peg 1: #{state.pegs[0]}
@@ -164,31 +167,31 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
         hr
 ```
 
-The accessors are used to display data:
+As you can see the accessors are used to display data:
 
-	li Peg 1: #{state.pegs[0]}
+    li Peg 1: #{state.pegs[0]}
 
 and to make decisions:
 
-	if state.canMove(0, 2)
+    if state.canMove(0, 2)
 
-The modifiers are used in the links to perform actions:
+The modifiers are used in the links, with the `goto()` function, to perform actions:
 
-	li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
-	...
-	p Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
-
-We are about to see what is that `goto()` right now in the next section.
+    li #[a(href=goto((state) => state.move(2, 0))) 3 ==> 1]
+    ...
+    p Of course you can also #[a(href=goto((state) => state.reset())) restart the game].
 
 ### The generator
 
 #### Following the links
 
-Starting from a template and a state, the generator recursively follows all the links, generating all the possible pages.
+Starting from a template and a state, the generator recursively follows all the links, generating all the possible
+pages.
 
-This is done with the `goto()` function, provided, besides the `state` instance, by the context of the template.
+This is done with the `goto()` function, provided by the context of the template.
 
-You can pass `goto()` a template name and/or a function (called *action*) that modifies the state. This function usually just calls a modifier method on the state.
+You can pass `goto()` a template name and/or a function (called *action*) that modifies the state. The action usually
+just calls a modifier method on the state.
 
 As the action is optional, it is possible to change only the template (that is, the location) and keep the state as is.
 
@@ -198,16 +201,20 @@ As the template name is optional, it is possible to change only the state withou
 
 The combination of a template and a state generates a page:
 
-	template + state = page
+    template + state = page
 
-To keep track of the generated pages, every state instance is reduced to a *hash*, which is a human readable string that uniquely identifies the state.
-It's a kind of compact JSON, that can deal also with the new features of ES6, like Maps and Sets, which are not handled by the standard JSON support.
+To keep track of the generated pages, every state instance is reduced to a *hash*, which is a human readable string that
+uniquely identifies the state.
+It's a kind of compact JSON, that can deal also with the new features of ES6, like Maps and Sets, which are not handled
+correctly by the functions of the JSON module.
 
 A template name and a state hash uniquely identify a page:
 
-	template name + hash(state) = page key
+    template name + hash(state) = page key
 
-For debug and learning purposes, you can use the `debug()` function inside a template to show the page key. Because the hash is human readable, it is a meaningful representation of the state. It can be very useful to understand why the template engine has generated the page as it is.
+For debug and learning purposes, you can use the `debug()` function inside a template to show the page key. Because the
+hash is human readable, it is a meaningful representation of the state. It can be very useful to understand why the
+template engine has generated the page as it is.
 
 ## API reference
 
@@ -218,15 +225,20 @@ For debug and learning purposes, you can use the `debug()` function inside a tem
 These are the supported options:
 
 * `templatesDir`, string, required: the path of the directory containing the templates
-* `outputDir`, string, required: the path of the directory to use for the generated XHTML files. This directory is used as input for the [ePUB creator](https://github.com/eit6609/epub-creator), so you can put in this directory any extra file (images, stylesheets) that you need in the ePUB.
+* `outputDir`, string, required: the path of the directory to use for the generated XHTML files. This directory is used
+  as input for the [ePUB creator](https://github.com/eit6609/epub-creator), so you can put in this directory any extra
+  file (images, stylesheets) that you need in the ePUB.
 * `metadata`, object, required, the options for the ePUB creator, with these properties:
     * `title`, string, optional, default `untitled`: the title of the ePUB
     * `author`, string, optional, default no author: the author of the ePUB
     * `language`, string, optional, default `en`: the language of the ePUB
-    * `cover`, string, optional, default no cover: a path relative to `outputDir` of an image that will become the cover of the ePUB
+    * `cover`, string, optional, default no cover: a path relative to `outputDir` of an image that will become the cover
+      of the ePUB
     * `filename`, string, required: the path of the generated ePUB
-* `markdown`, boolean, optional, default `false`: if `false` the template engine is Pug, otherwise it is Markdown Templates
-* `debug`, boolean, optional, default `false`: if `true` the `debug()` function called in the templates will return the page key, otherwise the empty string.
+* `markdown`, boolean, optional, default `false`: if `false` the template engine is Pug, otherwise it is Markdown
+  Templates
+* `debug`, boolean, optional, default `false`: if `true` the `debug()` function called in the templates will return the
+   page key, otherwise the empty string.
 
 #### `generate(initialTemplateName: string, initialState: object): promise`
 
@@ -245,20 +257,38 @@ These are the properties of the "locals" of the template engine.
 
 It is the state instance, that can be used to call its accessors.
 
-#### `debug()`
+#### `debug(): string`
 
-If the `debug` option is `true`, this function returns the key of the current page, that is the template name and the state hash.
+If the `debug` option is `true`, this function returns the key of the current page, that is the template name and the
+state hash, wrapped in a `<code>` element. Otherwise it returns the empty string. You can place its result wherever you
+like in the templates to display the info, and then simply disable it by setting the `debug` option to `false` without
+modifying the templates.
 
-#### `goto(templateName?: string, action?: function)`
+#### `goto(templateName?: string, action?: function): string`
 
-* `templateName` is the path of a template file, without the extension, relative to the `templatesDir`. It defaults to the current template's name.
-* `action` is a function that receives the current state as its only parameter and modifies it. It should return a falsy value unless it wants to replace the current state with a new one: in this case it should return the new state. This is handy for complex games because it enables you to move through independent stages of the game. More about this later, in the *Tips & Tricks* section.
+The purpose of the function is to ask the generator the URL of the page identified by the template name and the hash of
+the state you get by applying the action to a copy of the current state.
+The function returns the URL of the requested page, that can be used in the `href` of an `a` to create a link.
+
+The parameters are:
+
+* `templateName`: the path of a template file, without the extension, relative to the `templatesDir`. It defaults to
+the current template's name.
+* `action`: a function that receives a state as its only parameter and modifies it. It should return a falsy
+value unless it wants to replace the received state with a new one: in this case it should return the new state. This is
+handy for complex games because it enables you to move through independent stages of the game. More about this later,
+in the *Tips & Tricks* section.
+
+With this function you actually trigger the generation of the pages, because, if the requested page does not exist,
+the generator creates an empty page and enqueues it for the build, that is the execution of the template with the state
+of the page. That execution could find and execute some `goto()` that could trigger the creation of new pages, and so
+on.
 
 ## Examples
 
 You can generate the example ebooks by moving to the `code` folder and running the `main.js` script:
 
-	node main.js
+    node main.js
 
 You can change the debug options to `true` to see who (template + state) generated the pages.
 
@@ -287,7 +317,8 @@ You can download the generated ePUB [here](examples/desert/code/desert.epub).
 
 ### The Tower of Hanoi
 
-Not much of an adventure game, but I have loved this game when I learned about recursion and I think that it is a very neat example.
+Not much of an adventure game, but I have loved this game when I learned about recursion and I think that it is a very
+neat example.
 
 You can download the generated ePUB [here](examples/hanoi/code/hanoi.epub).
 
@@ -339,7 +370,7 @@ with this template:
 
 ```
 doctype strict
-html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
+html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
     head
         link(href="style-epub.css", rel="stylesheet", type="text/css")
         title Open the Safe
@@ -359,25 +390,30 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='it')
         hr
 ```
 
-The generated pages will be only *n* (the correct combination) + *n* (all the possible wrong combinations), where *n* is the length of the combination.
+The generated pages will be only *n* (the correct combination) + *n* (all the possible wrong combinations), where *n* is
+the length of the combination.
 
-Why? Because what determines the number of pages are the possible values of the properties of the state, and they are 2 * *n*:
+Why? Because what determines the number of pages are the possible values of the properties of the state, and they are
+2*n*:
 
 * 2 for `ok`
 * *n* for `index`
 
-For the sake of precision, there are only 2 * *n* - 1 pages, because the state `{index=0,ok=false}` is not used.
+For the sake of precision, there are only 2*n* - 1 pages, because the state `{index=0,ok=false}` is not used.
 
 #### Consume objects
 
-Almost every adventure game has a basket where the player can collect objects.
+Almost every adventure game has a basket where the player can put the objects found around.
 
-However, keeping objects in the basket is very expensive, because you'll have 2 ^ *n* possible states if you need to keep track of *n* objects.
+However, keeping objects in the basket is very expensive, because you'll have 2 ^ *n* possible states if you need to
+keep track of *n* objects.
 
 You should prefer objects that get consumed, and drop them as soon as you can.
 
 #### Partition the game
 
-You should partition the game in several independent stages, in order to reset the state when you finish one stage and enter another.
+You should partition the game in several independent stages, in order to reset the state when you finish one stage and
+enter another.
 
-You should implement the different stages with different state classes, and then exploit the feature of the generator that uses a new state when an action returns one to make the transition from one stage to the other.
+You should implement the different stages with different state classes, and then exploit the feature of the generator
+that uses the new state returned by an action to make the transition from one stage to another.
