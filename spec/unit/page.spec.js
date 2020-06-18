@@ -68,6 +68,23 @@ describe('Page', () => {
             const m = new Map([[1, 1], [2, 'a'], [d, d], [3, false], [o, o]]);
             expect(Page.hash(m)).toBe(`{1=1,${d.getTime()}=${d.getTime()},2=a,3=false,{a=1}={a=1}}`);
         });
+        it('should deal with circular references', () => {
+            const parent = {
+                children: []
+            };
+            const child1 = {
+                parent
+            };
+            const child2 = {
+                parent,
+            };
+            child1.sibling = child2;
+            child2.sibling = child1;
+            parent.children.push(child1, child2);
+            expect(Page.hash(parent))
+                .toBe('{children=[{parent=<circular0>,sibling={parent=<circular0>,sibling=<circular1>}},\
+{parent=<circular0>,sibling={parent=<circular0>,sibling=<circular2>}}]}');
+        });
     });
     describe('constructor()', () => {
         it('should store the parameters', () => {

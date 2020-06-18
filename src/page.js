@@ -2,6 +2,7 @@
 
 const {
         cloneDeep,
+        includes,
         isArray,
         isDate,
         isFunction,
@@ -29,20 +30,58 @@ ${body}
 </html>`;
 }
 
+class LoopDetector {
+    constructor () {
+        this.path = [];
+        this.replacements = new Map();
+        this.lastId = 0;
+    }
+
+    enter (obj) {
+        if (!isDate(obj) && (isArray(obj) || isSet(obj) || isObject(obj) || isMap(obj))) {
+            if (includes(this.path, obj)) {
+                let replacement = this.replacements.get(obj);
+                if (!replacement) {
+                    replacement = `<circular${this.lastId++}>`;
+                    this.replacements.set(obj, replacement);
+                }
+                return replacement;
+            } else {
+                this.path.push(obj);
+                return obj;
+            }
+        } else {
+            return obj;
+        }
+    }
+
+    exit () {
+        this.path.pop();
+    }
+}
+
 class Page {
 
-    static hash (value) {
+    static hash (value, loopDetector = new LoopDetector()) {
+        value = loopDetector.enter(value);
         if (isDate(value)) {
             return `${value.getTime()}`;
         } else if (isArray(value)) {
-            return `[${map(value, Page.hash)}]`;
+            const result = `[${map(value, (item) => Page.hash(item, loopDetector))}]`;
+            loopDetector.exit();
+            return result;
         } else if (isSet(value)) {
-            const entries = map([...value], Page.hash);
+            const entries = map([...value], (item) => Page.hash(item, loopDetector));
+            loopDetector.exit();
             return `{${sortBy(entries)}}`;
         } else if (isObject(value) || isMap(value)) {
-            let entries = map(toPairsIn(value), ([key, value]) => [Page.hash(key), Page.hash(value)]);
+            let entries = map(
+                toPairsIn(value),
+                ([key, value]) => [Page.hash(key, loopDetector), Page.hash(value, loopDetector)]
+            );
             entries = sortBy(entries, 0);
             entries = map(entries, ([key, value]) => `${key}=${value}`);
+            loopDetector.exit();
             return `{${entries}}`;
         } else {
             return String(value);
@@ -126,6 +165,5 @@ class Page {
 }
 
 Page.numberFormat = new Intl.NumberFormat('en', { minimumIntegerDigits: 4, useGrouping: false });
-
 
 module.exports = Page;

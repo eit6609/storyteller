@@ -211,8 +211,8 @@ The combination of a template and a state generates a page:
 
 To keep track of the generated pages, every state instance is reduced to a *hash*, which is a human readable string that
 uniquely identifies the state instance.
-It's a kind of compact JSON, that can deal also with the new features of ES6, like Maps and Sets, which are not handled
-correctly by the functions of the JSON module.
+It's a kind of compact JSON, that can deal also with the situations that are not handled by JSON, like circular
+references and the new data structures of ES6, Maps and Sets.
 
 A template name and a state hash uniquely identify a page:
 
