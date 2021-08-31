@@ -245,6 +245,13 @@ These are the supported options:
   Templates
 * `debug`, boolean, optional, default `false`: if `true` the `debug()` function called in the templates will return the
    page key, otherwise the empty string.
+* `contentBefore`, array, optional, default `[]`. Extra, static pages to insert into the generated ePUB before the
+   generated pages. The items of the array are objects with these properties:
+  * `fileName`, string, required. The path of the file relative to `outputDir`.
+  * `tocLabel`, string, optional. The label to use in the TOC. Leave it out if you don't want the page to be added to
+    the TOC.
+* `contentAfter`, array, optional, default `[]`. Extra, static pages to insert into the generated ePUB after the
+  generated pages. The items of the array are the same as `contentBefore`.
 
 #### `generate(initialTemplateName: string, initialState: object): promise`
 
