@@ -29,6 +29,8 @@ describe('Generator', () => {
             },
             markdown: false,
             debug: true,
+            contentBefore: [{ tocLabel: 'Front Matter', fileName: 'front.html' }],
+            contentAfter: [{ fileName: 'thanks.html' }],
             factory
         };
     });
@@ -48,9 +50,29 @@ describe('Generator', () => {
             expect(sut.metadata).toBe(options.metadata);
             expect(sut.markdown).toBe(options.markdown === true);
             expect(sut.debug).toBe(options.debug === true);
+            expect(sut.contentBefore).toBe(options.contentBefore);
+            expect(sut.contentAfter).toBe(options.contentAfter);
             expect(sut.createPage).toBe(options.factory.createPage);
             expect(sut.createTemplate).toBe(options.factory.createTemplate);
             expect(sut.createEPUBCreator).toBe(options.factory.createEPUBCreator);
+        });
+        it('should use default values', () => {
+            delete options.markdown;
+            delete options.debug;
+            delete options.contentBefore;
+            delete options.contentAfter;
+            delete options.factory;
+            sut = new Generator(options);
+            expect(sut.templatesDir).toBe(options.templatesDir);
+            expect(sut.outputDir).toBe(options.outputDir);
+            expect(sut.metadata).toBe(options.metadata);
+            expect(sut.markdown).toBeFalse();
+            expect(sut.debug).toBeFalse();
+            expect(sut.contentBefore).toEqual([]);
+            expect(sut.contentAfter).toEqual([]);
+            expect(sut.createPage).toBeFunction();
+            expect(sut.createTemplate).toBeFunction();
+            expect(sut.createEPUBCreator).toBeFunction();
         });
     });
     describe('generate()', () => {
@@ -179,8 +201,11 @@ describe('Generator', () => {
             await sut.createEpub();
             expect(factory.createEPUBCreator).toHaveBeenCalledWith({
                 contentDir: 'output-dir',
-                spine: ['0000.html', '0001.html', '0002.html', '0003.html'],
-                toc: [[{ label: 'Start', href: '0000.html' }]],
+                spine: ['front.html', '0000.html', '0001.html', '0002.html', '0003.html', 'thanks.html'],
+                toc: [
+                    [{ label: 'Front Matter', href: 'front.html' }],
+                    [{ label: 'Game Start', href: '0000.html' }]
+                ],
                 cover: 'a-cover',
                 simpleMetadata: {
                     author: 'an-author',

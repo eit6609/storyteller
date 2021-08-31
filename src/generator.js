@@ -8,6 +8,11 @@ const
     Page = require('./page.js'),
     Template = require('./template.js');
 
+const extraContentSchema = Joi.object({
+    fileName: Joi.string().required(),
+    tocLabel: Joi.string()
+});
+
 const optionsSchema = Joi.object({
     templatesDir: Joi.string().required(),
     outputDir: Joi.string().required(),
@@ -20,11 +25,13 @@ const optionsSchema = Joi.object({
     }).required(),
     markdown: Joi.boolean(),
     debug: Joi.boolean(),
+    contentBefore: Joi.array().items(extraContentSchema),
+    contentAfter: Joi.array().items(extraContentSchema),
     factory: Joi.object({
         createPage: Joi.function(),
         createTemplate: Joi.function(),
         createEPUBCreator: Joi.function()
-    })
+    }),
 });
 
 class Generator {
@@ -36,6 +43,8 @@ class Generator {
         this.metadata = options.metadata;
         this.markdown = options.markdown === true;
         this.debug = options.debug === true;
+        this.contentBefore = options.contentBefore || [];
+        this.contentAfter = options.contentAfter || [];
         this.createPage = get(options, 'factory.createPage', (...params) => new Page(...params));
         this.createTemplate = get(options, 'factory.createTemplate', (...params) => new Template(...params));
         this.createEPUBCreator = get(options, 'factory.createEPUBCreator', (...params) => new EPUBCreator(...params));
@@ -86,10 +95,23 @@ class Generator {
 
     createEpub () {
         const spine = [];
+        const toc = [];
+        for (const { tocLabel, fileName } of this.contentBefore) {
+            spine.push(fileName);
+            if (tocLabel) {
+                toc.push([{ label: tocLabel, href: fileName }]);
+            }
+        }
         for (let i = 0; i < this.numberOfPages; i++) {
             spine.push(`${Page.numberFormat.format(i)}.html`);
         }
-        const toc = [[{ label: 'Start', href: `${Page.numberFormat.format(0)}.html` }]];
+        toc.push([{ label: 'Game Start', href: `${Page.numberFormat.format(0)}.html` }]);
+        for (const { tocLabel, fileName } of this.contentAfter) {
+            spine.push(fileName);
+            if (tocLabel) {
+                toc.push([{ label: tocLabel, href: fileName }]);
+            }
+        }
         const { cover } = this.metadata;
         const epubCreator = this.createEPUBCreator({
             contentDir: this.outputDir,
