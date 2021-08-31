@@ -79,7 +79,7 @@ rules:
   # Custom rules
   no-warning-comments: 1
   max-depth: [1, 3]
-  max-statements: [1, 15]
+  max-statements: [1, 16]
   camelcase: [2, {properties: "never"}]
   brace-style: [2, "1tbs", {allowSingleLine: true}]
   block-scoped-var: 2
