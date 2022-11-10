@@ -15,7 +15,7 @@ const {
         toPairsIn
     } = require('lodash'),
     fs = require('fs'),
-    marked = require('marked');
+    { marked } = require('marked');
 
 function wrapBody (body) {
     return `<?xml version="1.0" encoding="utf-8"?>
