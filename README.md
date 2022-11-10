@@ -365,7 +365,7 @@ class Safe {
     }
 
     choose (digit) {
-        this.ok = String(digit) === this.combination.charAt(this.index);
+        this.ok = this.ok && String(digit) === this.combination.charAt(this.index);
         this.index++;
     }
 
