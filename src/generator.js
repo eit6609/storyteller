@@ -96,6 +96,9 @@ class Generator {
     createEpub () {
         const spine = [];
         const toc = [];
+        if (this.metadata.cover) {
+            toc.push([{ label: 'Cover', href: 'cover-page.html' }]);
+        }
         for (const { tocLabel, fileName } of this.contentBefore) {
             spine.push(fileName);
             if (tocLabel) {
@@ -125,7 +128,7 @@ class Generator {
 
     printReport () {
         function makeFilterByTemplateName (templateName) {
-            return (pageKey) => pageKey.substring(0, pageKey.lastIndexOf('/')) === templateName;
+            return (pageKey) => pageKey.substring(0, pageKey.indexOf('{') - 1) === templateName;
         }
 
         const templateNames = sortBy(Array.from(this.templates.keys()));

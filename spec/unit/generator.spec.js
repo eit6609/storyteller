@@ -203,6 +203,7 @@ describe('Generator', () => {
                 contentDir: 'output-dir',
                 spine: ['front.html', '0000.html', '0001.html', '0002.html', '0003.html', 'thanks.html'],
                 toc: [
+                    [{ label: 'Cover', href: 'cover-page.html' }],
                     [{ label: 'Front Matter', href: 'front.html' }],
                     [{ label: 'Game Start', href: '0000.html' }]
                 ],
