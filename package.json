@@ -42,7 +42,7 @@
         "@eit6609/markdown-templates": "^1.0.0",
         "@hapi/joi": "^16.1.7",
         "lodash": "^4.17.10",
-        "marked": "^0.8.2",
-        "pug": "^2.0.4"
+        "marked": "^4.0.10",
+        "pug": "^3.0.1"
     }
 }
