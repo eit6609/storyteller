@@ -95,6 +95,13 @@ describe('Page', () => {
         });
     });
     describe('followLink()', () => {
+        it('should call builderr.getPage() with a clone of the state', () => {
+            spyOn(builder, 'getPage').and.returnValue('a-page');
+            expect(sut.followLink()).toBe('a-page');
+            const state = builder.getPage.calls.argsFor(0)[1];
+            expect(state).toEqual(sut.state);
+            expect(state).not.toBe(sut.state);
+        });
         it('should call builder.getPage() with the right parameters and return its result when called without ' +
             'parameters', () => {
             spyOn(builder, 'getPage').and.returnValue('a-page');
@@ -154,9 +161,9 @@ describe('Page', () => {
             expect(actualParams.debug.name).toEqual('bound debug');
         });
         it('should call sut.template.build() with the right parameters and set sut.text with the XHTML conversion of ' +
-            'its result if sut.builder.markdown is true', () => {
+            'its result if sut.builder.templateEngine is `mt`', () => {
             spyOn(sut.template, 'build').and.returnValue('a paragraph\n');
-            sut.builder.markdown = true;
+            sut.builder.templateEngine = 'mt';
             sut.build();
             expect(sut.text).toBe(`<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">

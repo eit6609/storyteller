@@ -2,7 +2,7 @@
 
 const
     { inspect } = require('util'),
-    { filter, forEach, get, isUndefined, pick, sortBy } = require('lodash'),
+    { filter, forEach, get, isUndefined, omit, sortBy } = require('lodash'),
     Joi = require('@hapi/joi'),
     { EPUBCreator } = require('@eit6609/epub-creator'),
     Page = require('./page.js'),
@@ -20,10 +20,14 @@ const optionsSchema = Joi.object({
         title: Joi.string(),
         author: Joi.string(),
         language: Joi.string(),
+        isbn: Joi.string(),
+        description: Joi.string(),
+        tags: Joi.array().items(Joi.string()),
         cover: Joi.string(),
-        filename: Joi.string().required()
+        filename: Joi.string().required(),
     }).required(),
-    markdown: Joi.boolean(),
+    advancedMetadata: Joi.array(),
+    templateEngine: Joi.string().valid('pug', 'ejs', 'mt').required(),
     debug: Joi.boolean(),
     contentBefore: Joi.array().items(extraContentSchema),
     contentAfter: Joi.array().items(extraContentSchema),
@@ -41,7 +45,8 @@ class Generator {
         this.templatesDir = options.templatesDir;
         this.outputDir = options.outputDir;
         this.metadata = options.metadata;
-        this.markdown = options.markdown === true;
+        this.advancedMetadata = options.advancedMetadata || [];
+        this.templateEngine = options.templateEngine;
         this.debug = options.debug === true;
         this.contentBefore = options.contentBefore || [];
         this.contentAfter = options.contentAfter || [];
@@ -121,7 +126,8 @@ class Generator {
             spine,
             toc,
             cover,
-            simpleMetadata: pick(this.metadata, ['author', 'title', 'language'])
+            simpleMetadata: omit(this.metadata, ['cover', 'filename']),
+            metadata: this.advancedMetadata,
         });
         return epubCreator.create(this.metadata.filename);
     }

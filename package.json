@@ -1,6 +1,6 @@
 {
     "name": "@eit6609/storyteller",
-    "version": "1.0.7",
+    "version": "2.0.0",
     "description": "An interactive ebooks generator",
     "keywords": [
         "epub",
@@ -38,9 +38,10 @@
         "jasmine-spec-reporter": "^3.2.0"
     },
     "dependencies": {
-        "@eit6609/epub-creator": "^1.0.0",
+        "@eit6609/epub-creator": "^1.1.0",
         "@eit6609/markdown-templates": "^1.0.0",
         "@hapi/joi": "^16.1.7",
+        "ejs": "^3.1.8",
         "lodash": "^4.17.10",
         "marked": "^4.0.10",
         "pug": "^3.0.1"

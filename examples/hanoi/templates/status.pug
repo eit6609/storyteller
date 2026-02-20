@@ -1,4 +1,4 @@
-doctype strict
+doctype 1.1
 html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
     head
         link(href="style-epub.css", rel="stylesheet", type="text/css")
@@ -13,7 +13,7 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
             li Peg 2: #{state.pegs[1]}
             li Peg 3: #{state.pegs[2]}
         if state.isFinished()
-            h1 YOU’VE WON!
+            h1 YOU WIN!
             br
             p.first Want to #[a(href=goto((state) => state.reset())) play again]?
         else

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <link href="style-epub.css" rel="stylesheet" type="text/css"/>
+    <title>Saving Goat and Cabbages</title>
+  </head>
+  <body>
+    <h3>Saving Goat and Cabbages</h3>
+    <h4>Arrival bank</h4>
+    <hr/>
+    <p><%=debug()%></p>
+<%if (state.banks[1].size) {%>
+    <p class="first">On the bank there are:</p>
+        <ul>
+    <%for (const item of [...state.banks[1]]) {%>
+            <li><%=state.describe(item)%></li>
+    <%}%>
+        </ul>
+<%}%>
+<%if (state.isFinished()) {%>
+    <h2>YOU WIN</h2>
+    <p>But you can <a href="<%=goto('bank0', (state) => state.reset())%>">restart the game</a>, if you want.</p>
+<%} else {%>
+    <p class="first">You can:</p>
+        <ul>
+    <%if (state.boat.size) {%>
+        <%for (const item of [...state.boat]) {%>
+            <li><a href="<%=goto((state) => state.unloadItem(item, 1))%>">unload <%=state.describe(item)%></a></li>
+        <%}%>
+    <%} else {%>
+        <%for (const item of [...state.banks[1]]) {%>
+            <li><a href="<%=goto((state) => state.loadItem(item, 1))%>">load <%=state.describe(item)%></a></li>
+        <%}%>
+    <%}%>
+            <li><a href="<%=goto('river')%>">leave the bank</a></li>
+        </ul>
+<%}%>
+    <hr/>
+  </body>
+</html>

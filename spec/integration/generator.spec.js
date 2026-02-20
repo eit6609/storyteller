@@ -30,6 +30,7 @@ describe('Generator [integration]', () => {
         const options = {
             templatesDir: TEMPLATES_DIR,
             outputDir: OUTPUT_DIR,
+            templateEngine: 'pug',
             debug: false,
             metadata: {
                 title: 'The Tower of Hanoi',

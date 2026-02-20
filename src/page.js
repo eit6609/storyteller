@@ -98,8 +98,8 @@ class Page {
     followLink (templateName, action) {
         templateName = templateName || this.template.name;
         let { state } = this;
+        state = cloneDeep(state);
         if (action) {
-            state = cloneDeep(state);
             const newState = action.call(null, state);
             // this way the action can create a new state and initialize a new stage of the game:
             if (newState) {
@@ -110,7 +110,7 @@ class Page {
     }
 
     build () {
-        if (this.builder.markdown) {
+        if (this.builder.templateEngine === 'mt') {
             const text = this.template.build(this);
             const markedOptions = {
                 smartypants: true,

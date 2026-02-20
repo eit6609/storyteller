@@ -37,7 +37,7 @@ You can:
 `reason`!
 
         }
-## YOU LOST!
+## YOU LOSE!
 
 But you can [restart the game](`goto('bank0', (state) => state.reset())`), if you want.
 

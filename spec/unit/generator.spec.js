@@ -18,6 +18,7 @@ describe('Generator', () => {
             }
         },
         options = {
+            templateEngine: 'ejs',
             templatesDir: 'templates-dir',
             outputDir: 'output-dir',
             metadata: {
@@ -27,7 +28,8 @@ describe('Generator', () => {
                 language: 'a-language',
                 cover: 'a-cover'
             },
-            markdown: false,
+            advancedMetadata: ['a'],
+            templateEngine: 'pug',
             debug: true,
             contentBefore: [{ tocLabel: 'Front Matter', fileName: 'front.html' }],
             contentAfter: [{ fileName: 'thanks.html' }],
@@ -45,10 +47,12 @@ describe('Generator', () => {
         });
         it('should store the options', () => {
             sut = new Generator(options);
+            expect(sut.templateEngine).toBe(options.templateEngine);
             expect(sut.templatesDir).toBe(options.templatesDir);
             expect(sut.outputDir).toBe(options.outputDir);
             expect(sut.metadata).toBe(options.metadata);
-            expect(sut.markdown).toBe(options.markdown === true);
+            expect(sut.advancedMetadata).toBe(options.advancedMetadata);
+            expect(sut.templateEngine).toBe(options.templateEngine);
             expect(sut.debug).toBe(options.debug === true);
             expect(sut.contentBefore).toBe(options.contentBefore);
             expect(sut.contentAfter).toBe(options.contentAfter);
@@ -57,7 +61,6 @@ describe('Generator', () => {
             expect(sut.createEPUBCreator).toBe(options.factory.createEPUBCreator);
         });
         it('should use default values', () => {
-            delete options.markdown;
             delete options.debug;
             delete options.contentBefore;
             delete options.contentAfter;
@@ -66,7 +69,7 @@ describe('Generator', () => {
             expect(sut.templatesDir).toBe(options.templatesDir);
             expect(sut.outputDir).toBe(options.outputDir);
             expect(sut.metadata).toBe(options.metadata);
-            expect(sut.markdown).toBeFalse();
+            expect(sut.templateEngine).toBe(options.templateEngine);
             expect(sut.debug).toBeFalse();
             expect(sut.contentBefore).toEqual([]);
             expect(sut.contentAfter).toEqual([]);
@@ -212,7 +215,8 @@ describe('Generator', () => {
                     author: 'an-author',
                     title: 'a-title',
                     language: 'a-language'
-                }
+                },
+                metadata: ['a']
             });
             expect(epubCreator.create).toHaveBeenCalledWith('a-filename');
         });
