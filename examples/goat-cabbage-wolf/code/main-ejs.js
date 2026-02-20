@@ -6,14 +6,15 @@ const
 
 function build () {
     const options = {
+        templateEngine: 'ejs',
         templatesDir: '../templates',
-        outputDir: '../out-xhtml',
+        outputDir: '../out-ejs',
         debug: false,
         metadata: {
             title: 'Saving Goat and Cabbages',
             author: 'Dario Morandini',
             language: 'en',
-            filename: 'goat-cabbage-wolf-xhtml.epub',
+            filename: 'goat-cabbage-wolf-ejs.epub',
             cover: 'images/cover.png',
         }
     };

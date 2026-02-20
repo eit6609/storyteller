@@ -6,6 +6,7 @@ const
 
 function build () {
     const options = {
+        templateEngine: 'pug',
         templatesDir: '../templates',
         outputDir: '../out',
         debug: false,

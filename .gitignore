@@ -5,3 +5,4 @@
 /spec/fixtures/result.epub
 npm-debug.log
 .DS_Store
+.npmrc

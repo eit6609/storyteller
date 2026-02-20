@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <link href="style-epub.css" rel="stylesheet" type="text/css"/>
+    <title>Saving Goat and Cabbages</title>
+  </head>
+  <body>
+    <h3>Saving Goat and Cabbages</h3>
+    <h4>On the river</h4>
+    <hr/>
+    <p><%=debug()%></p>
+<% if (state.boat.size) {%>
+    <p class="first">On the boat you carry:</p>
+        <ul>
+    <%for (const item of [...state.boat]) {%>
+            <li><%=state.describe(item)%></li>
+    <%}%>
+        </ul>
+<%} else {%>
+    <p class="first">The boat is empty.</p>
+<%}%>
+<%if (state.isSafe()) {%>
+    <p class="first">You can:</p>
+        <ul>
+            <li><a href="<%=goto('bank0')%>">go to the start bank</a></li>
+            <li><a href="<%=goto('bank1')%>">go to the arrival bank</a></li>
+        </ul>
+<%} else {%>
+    <%for (const item of state.whyWasNotSafe()) {%>
+    <p class="first"><%=item%>!</p>
+    <%}%>
+    <h2>YOU LOST!</h2>
+    <p>But you can <a href="<%=goto('bank0', (state) => state.reset())%>">restart the game</a>, if you want.</p>
+<%}%>
+    <hr/>
+  </body>
+</html>

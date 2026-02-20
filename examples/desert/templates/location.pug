@@ -1,4 +1,4 @@
-doctype strict
+doctype 1.1
 html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
     head
         link(href="style-epub.css", rel="stylesheet", type="text/css")
@@ -11,11 +11,11 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
         p.first There are #{state.locations[state.location]} jerrycan(s) at this location.
         p.first You are carrying #{state.payload} jerrycan(s) and your tank contains #{state.tank} jerrycan(s) of fuel.
         if state.isFinished()
-            h1 You’ve won!
+            h1 You win!
             p.first You did it in #{state.trips} trips.</p>
             p.first Click #[a(href=goto((state) => state.reset())) here] to restart.
         else if state.isStranded()
-            h1 You’re stranded!
+            h1 You are stranded!
             p.first Click #[a(href=goto((state) => state.reset())) here] to restart.
         else
             p.first You can:
