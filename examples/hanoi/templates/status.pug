@@ -14,7 +14,7 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
             li Peg 3: #{state.pegs[2]}
         if state.isFinished()
             h1 YOU WIN!
-            br
+            p &#160;
             p.first Want to #[a(href=goto((state) => state.reset())) play again]?
         else
             p.first Possible moves are:
