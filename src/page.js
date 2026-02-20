@@ -17,11 +17,12 @@ const {
     fs = require('fs'),
     { marked } = require('marked');
 
-function wrapBody (body) {
+function wrapBody (body, title) {
     return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it">
 <head>
+<title>${title}</title>
 <link href="style-epub.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -116,7 +117,7 @@ class Page {
                 smartypants: true,
                 xhtml: true
             };
-            this.text = wrapBody(marked(text, markedOptions));
+            this.text = wrapBody(marked(text, markedOptions), this.builder.metadata.title || 'Untitled');
         } else {
             const locals = {
                 state: this.state,
