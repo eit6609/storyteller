@@ -18,7 +18,7 @@
         </ul>
 <%}%>
 <%if (state.isFinished()) {%>
-    <h2>YOU WON</h2>
+    <h2>YOU WIN</h2>
     <p>But you can <a href="<%=goto('bank0', (state) => state.reset())%>">restart the game</a>, if you want.</p>
 <%} else {%>
     <p class="first">You can:</p>

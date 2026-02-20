@@ -23,6 +23,6 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
         else
             each item in state.whyWasNotSafe()
                 p.first #{item}!
-            h2 YOU LOST!
+            h2 YOU LOSE!
             p But you can #[a(href=goto('bank0', (state) => state.reset())) restart the game], if you want.
         hr

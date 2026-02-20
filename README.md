@@ -145,7 +145,7 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
             li Peg 2: #{state.pegs[1]}
             li Peg 3: #{state.pegs[2]}
         if state.isFinished()
-            h1 YOU’VE WON!
+            h1 YOU WIN!
             br
             p.first Want to #[a(href=goto((state) => state.reset())) play again]?
         else
@@ -236,13 +236,16 @@ These are the supported options:
   as input for the [ePUB creator](https://github.com/eit6609/epub-creator), so you can put in this directory any extra
   file (images, stylesheets) that you need in the ePUB.
 * `metadata`, object, required, the options for the ePUB creator, with these properties:
-    * `title`, string, optional, default `untitled`: the title of the ePUB
+    * `title`, string, optional, default `Untitled`: the title of the ePUB
     * `author`, string, optional, default no author: the author of the ePUB
     * `language`, string, optional, default `en`: the language of the ePUB
+    * `description`, string, optional, default no description: the description of the ePUB
+    * `isbn`, string, optional, default no ISBN: the ISBN of the ePUB
+    * `tags`, array of string, optional, default no subjects: the subjects of the ePUB
     * `cover`, string, optional, default no cover: a path relative to `outputDir` of an image that will become the cover
       of the ePUB
     * `filename`, string, required: the path of the generated ePUB
-* `templateEngine`, string, required, possible values: ejs, pug, mt: the template engine used to
+* `templateEngine`, string, required, possible values: `ejs`, `pug`, `mt`: the template engine used to
    generate the pages.
 * `debug`, boolean, optional, default `false`: if `true` the `debug()` function called in the templates will return the
    page key, otherwise the empty string.
@@ -314,14 +317,19 @@ But if you are lazy you can just download the generated ePUBs.
 
 A classic puzzle!
 
-There are two scripts:
+There are three scripts:
 
-* `main-xhtml.js`, that uses the Pug (.pug) templates
+* `main-pug.js`, that uses the Pug (.pug) templates
+* `main-ejs.js`, that uses the EJS (.html) templates
 * `main-markdown.js`, that uses the experimental Markdown Templates (.md) templates
 
 The generated ePUBs should be the same.
 
-You can download the generated ePUB [here](examples/goat-cabbage-wolf/code/goat-cabbage-wolf-xhtml.epub).
+You can download the generated ePUBs here:
+
+* [pug](examples/goat-cabbage-wolf/code/goat-cabbage-wolf-pug.epub)
+* [ejs](examples/goat-cabbage-wolf/code/goat-cabbage-wolf-ejs.epub)
+* [markdown](examples/goat-cabbage-wolf/code/goat-cabbage-wolf-markdown.epub)
 
 ### Desert Traversal
 
@@ -392,9 +400,9 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
         h3 Open the Safe
         hr
         if state.isRight()
-            h1 YOU’VE WON!
+            h1 YOU WIN!
         else if state.isWrong()
-            h1 YOU’VE LOST!
+            h1 YOU LOSE!
         else
             p.first Choose digit ##{state.index + 1}:
             ul

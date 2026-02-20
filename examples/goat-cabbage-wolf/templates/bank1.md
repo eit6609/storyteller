@@ -18,7 +18,7 @@ On the bank there are:
     if (state.isFinished()) {
 
 
-## YOU WON
+## YOU WIN
 
 But you can [restart the game](`goto('bank0', (state) => state.reset())`), if you want.
 

@@ -14,7 +14,7 @@ html(xmlns='http://www.w3.org/1999/xhtml', xml:lang='en')
                 each item in [...state.banks[1]]
                     li #{state.describe(item)}
         if state.isFinished()
-            h2 YOU WON
+            h2 YOU WIN
             p But you can #[a(href=goto('bank0', (state) => state.reset())) restart the game], if you want.
         else
             p.first You can:

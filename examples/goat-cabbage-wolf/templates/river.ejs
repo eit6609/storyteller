@@ -29,7 +29,7 @@
     <%for (const item of state.whyWasNotSafe()) {%>
     <p class="first"><%=item%>!</p>
     <%}%>
-    <h2>YOU LOST!</h2>
+    <h2>YOU LOSE!</h2>
     <p>But you can <a href="<%=goto('bank0', (state) => state.reset())%>">restart the game</a>, if you want.</p>
 <%}%>
     <hr/>
